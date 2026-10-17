@@ -1,0 +1,89 @@
+---
+import LanguageSwitcher from './LanguageSwitcher.astro';
+
+const { t, user } = Astro.locals;
+const currentPath = Astro.url.pathname;
+---
+
+<header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-2xs">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <!-- Brand Logo & Title -->
+      <a href="/" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#E8973A] to-[#F3AA55] flex items-center justify-center text-white shadow-sm shadow-[#E8973A]/20 transition-transform group-hover:scale-105">
+          <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+          </svg>
+        </div>
+        <div>
+          <span class="block font-bold text-gray-900 text-sm sm:text-base leading-tight group-hover:text-[#E8973A] transition-colors">
+            {t('appName')}
+          </span>
+          <span class="block text-[11px] text-gray-500 font-medium">
+            {t('tagline')}
+          </span>
+        </div>
+      </a>
+
+      <!-- Navigation links (Desktop) -->
+      <nav class="hidden md:flex items-center gap-6">
+        <a
+          href="/"
+          class={`text-sm font-medium transition-colors ${
+            currentPath === '/' ? 'text-[#E8973A]' : 'text-gray-600 hover:text-gray-900'
+          }`}
+        >
+          {t('nav.home')}
+        </a>
+        <a
+          href="/centers"
+          class={`text-sm font-medium transition-colors ${
+            currentPath.startsWith('/centers') ? 'text-[#E8973A]' : 'text-gray-600 hover:text-gray-900'
+          }`}
+        >
+          {t('nav.centers')}
+        </a>
+        <a
+          href="/events"
+          class={`text-sm font-medium transition-colors ${
+            currentPath.startsWith('/events') ? 'text-[#E8973A]' : 'text-gray-600 hover:text-gray-900'
+          }`}
+        >
+          {t('nav.events')}
+        </a>
+        <a
+          href="/about"
+          class={`text-sm font-medium transition-colors ${
+            currentPath.startsWith('/about') ? 'text-[#E8973A]' : 'text-gray-600 hover:text-gray-900'
+          }`}
+        >
+          {t('nav.about')}
+        </a>
+      </nav>
+
+      <!-- Right controls (Language + Auth) -->
+      <div class="flex items-center gap-3">
+        <LanguageSwitcher />
+
+        {user ? (
+          <a
+            href="/dashboard"
+            class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-[#E8973A] hover:bg-[#D48429] text-white text-xs sm:text-sm font-semibold shadow-xs transition-all cursor-pointer"
+          >
+            <span>{t('nav.dashboard')}</span>
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </a>
+        ) : (
+          <a
+            href="/login"
+            class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg border border-[#E8973A] text-[#E8973A] hover:bg-[#FFF9F3] text-xs sm:text-sm font-semibold transition-all cursor-pointer"
+          >
+            <span>{t('nav.login')}</span>
+          </a>
+        )}
+      </div>
+    </div>
+  </div>
+</header>

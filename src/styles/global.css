@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-sans: 'Inter', 'Noto Sans Gujarati', system-ui, -apple-system, sans-serif;
+    
+    /* Brand Colors */
+    --color-saffron: #E8973A;
+    --color-saffron-light: #FDEED9;
+    --color-saffron-dark: #C2741C;
+
+    --color-himalayan-blue: #4A90D9;
+    --color-himalayan-light: #E8F2FC;
+    --color-himalayan-dark: #2F6DB1;
+
+    --color-sage: #6B9F78;
+    --color-sage-light: #EDF5EF;
+    --color-sage-dark: #4F7959;
+
+    /* Neutrals */
+    --color-bg-base: #FFFFFF;
+    --color-bg-warm: #FFF9F3;
+    --color-bg-subtle: #F8F9FA;
+    --color-border: #E5E7EB;
+    --color-text-primary: #1F2937;
+    --color-text-secondary: #4B5563;
+    --color-text-muted: #9CA3AF;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--color-bg-warm);
+    color: var(--color-text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+  }
+}
+
+/* Custom Meditation Ambient Effects */
+.meditation-gradient {
+  background: linear-gradient(135deg, #FFF9F3 0%, #FFFFFF 50%, #F0F7FF 100%);
+}
+
+.saffron-gradient {
+  background: linear-gradient(135deg, #E8973A 0%, #F3AA55 100%);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(229, 231, 235, 0.8);
+}

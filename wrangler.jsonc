@@ -1,0 +1,18 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "bhuj-meditation-center",
+  "compatibility_date": "2026-10-13",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "triggers": {
+    "crons": [
+      "0 1 * * *",
+      "0 */6 * * *"
+    ]
+  },
+  "vars": {
+    "PUBLIC_SUPABASE_URL": "",
+    "PUBLIC_APP_URL": "http://localhost:4321"
+  }
+}

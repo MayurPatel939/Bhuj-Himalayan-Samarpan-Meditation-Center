@@ -1,0 +1,50 @@
+---
+const { t } = Astro.locals;
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="bg-white border-t border-gray-100 py-10 mt-auto">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+      <!-- Col 1: About -->
+      <div class="md:col-span-2 space-y-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#E8973A] to-[#F3AA55] flex items-center justify-center text-white">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+          </div>
+          <span class="font-bold text-gray-900 text-sm">{t('appName')}</span>
+        </div>
+        <p class="text-xs text-gray-500 leading-relaxed max-w-md">
+          {t('tagline')}. A non-commercial spiritual initiative dedicated to sharing the simple, natural practice of Himalayan Samarpan Meditation in Bhuj, Kutch, Gujarat.
+        </p>
+      </div>
+
+      <!-- Col 2: Quick Links -->
+      <div>
+        <h4 class="text-xs font-semibold text-gray-900 uppercase tracking-wider mb-3">Links</h4>
+        <ul class="space-y-2 text-xs text-gray-600">
+          <li><a href="/" class="hover:text-[#E8973A] transition-colors">{t('nav.home')}</a></li>
+          <li><a href="/centers" class="hover:text-[#E8973A] transition-colors">{t('nav.centers')}</a></li>
+          <li><a href="/events" class="hover:text-[#E8973A] transition-colors">{t('nav.events')}</a></li>
+          <li><a href="/about" class="hover:text-[#E8973A] transition-colors">{t('nav.about')}</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 3: Portal -->
+      <div>
+        <h4 class="text-xs font-semibold text-gray-900 uppercase tracking-wider mb-3">Portal</h4>
+        <ul class="space-y-2 text-xs text-gray-600">
+          <li><a href="/login" class="hover:text-[#E8973A] transition-colors">{t('nav.login')}</a></li>
+          <li><a href="/dashboard" class="hover:text-[#E8973A] transition-colors">{t('nav.dashboard')}</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-400 gap-2">
+      <p>© {currentYear} {t('appName')}. All rights reserved.</p>
+      <p>Built with peace and dedication for Samarpan seekers.</p>
+    </div>
+  </div>
+</footer>
