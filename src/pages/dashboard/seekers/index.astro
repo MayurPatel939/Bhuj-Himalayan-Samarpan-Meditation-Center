@@ -1,0 +1,56 @@
+---
+import DashboardLayout from '@/layouts/DashboardLayout.astro';
+import { SeekerTable } from '@/features/seekers/components/SeekerTable';
+
+const { t, locale, supabase } = Astro.locals;
+
+// Fetch initial seekers and centers for dropdown filter
+let initialSeekers: any[] = [];
+let centers: any[] = [];
+
+try {
+  const [seekersRes, centersRes] = await Promise.all([
+    supabase
+      .from('seekers')
+      .select('*, centers(id, name_en, name_gu)')
+      .eq('status', 'active')
+      .order('created_at', { ascending: false })
+      .limit(25),
+    supabase
+      .from('centers')
+      .select('id, name_en, name_gu')
+      .eq('is_active', true)
+      .order('name_en'),
+  ]);
+
+  initialSeekers = seekersRes.data || [];
+  centers = centersRes.data || [];
+} catch (err) {
+  console.warn('Initial seekers fetch fallback:', err);
+}
+---
+
+<DashboardLayout title={t('seekers.title')}>
+  <div class="space-y-6">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+      <div>
+        <h1 class="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
+          {t('seekers.title')}
+        </h1>
+        <p class="text-xs text-gray-500 mt-1">
+          {locale === 'gu'
+            ? 'કેન્દ્રવાર સાધકોની નોંધણી, વિગતો અને વોટ્સએપ સંમતિનું સંચાલન.'
+            : 'Manage registered seekers, center assignments, and notification preferences.'}
+        </p>
+      </div>
+    </div>
+
+    <!-- Interactive Seeker Table Island -->
+    <SeekerTable
+      client:load
+      initialSeekers={initialSeekers}
+      centers={centers}
+      locale={locale}
+    />
+  </div>
+</DashboardLayout>

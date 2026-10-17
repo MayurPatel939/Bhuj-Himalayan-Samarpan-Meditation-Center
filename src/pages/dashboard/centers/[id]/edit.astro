@@ -1,0 +1,45 @@
+---
+import DashboardLayout from '@/layouts/DashboardLayout.astro';
+import { CenterForm } from '@/features/centers/components/CenterForm';
+import { canAccessCenter } from '@/lib/auth/permissions';
+
+const { id } = Astro.params;
+const { t, locale, roles, supabase } = Astro.locals;
+
+// Guard: Must have access to this center
+if (!canAccessCenter(roles, id)) {
+  return Astro.redirect('/dashboard/centers');
+}
+
+const { data: center, error } = await supabase
+  .from('centers')
+  .select('*')
+  .eq('id', id)
+  .single();
+
+if (error || !center) {
+  return Astro.redirect('/dashboard/centers');
+}
+---
+
+<DashboardLayout title="Edit Meditation Center">
+  <div class="max-w-3xl mx-auto space-y-6">
+    <div>
+      <a href="/dashboard/centers" class="text-xs font-semibold text-[#E8973A] hover:underline flex items-center gap-1 mb-1">
+        <span>←</span>
+        <span>{t('back')} to Centers</span>
+      </a>
+      <h1 class="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
+        Edit Center: {locale === 'gu' ? center.name_gu : center.name_en}
+      </h1>
+    </div>
+
+    <!-- Center Form Island in Edit Mode -->
+    <CenterForm
+      client:load
+      initialData={center}
+      isEditing={true}
+      locale={locale}
+    />
+  </div>
+</DashboardLayout>

@@ -13,7 +13,11 @@ type ENV = {
   APP_SECRET_KEY?: string;
 };
 
-type Runtime = import("@astrojs/cloudflare").Runtime<ENV>;
+type Runtime = {
+  env: ENV;
+  waitUntil?: (promise: Promise<any>) => void;
+  passThroughOnException?: () => void;
+};
 
 declare namespace App {
   interface Locals {

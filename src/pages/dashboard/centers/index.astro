@@ -1,0 +1,64 @@
+---
+import DashboardLayout from '@/layouts/DashboardLayout.astro';
+import { CenterTable } from '@/features/centers/components/CenterTable';
+import { isAdminOrAbove } from '@/lib/auth/permissions';
+
+const { t, locale, roles, supabase } = Astro.locals;
+const isAdmin = isAdminOrAbove(roles);
+
+let centersWithCounts: any[] = [];
+
+try {
+  const { data: centers } = await supabase
+    .from('centers')
+    .select('*')
+    .order('name_en');
+
+  // Count seekers per center
+  if (centers && centers.length > 0) {
+    const centerIds = centers.map((c) => c.id);
+    const { data: seekerCounts } = await supabase
+      .from('seekers')
+      .select('center_id')
+      .in('center_id', centerIds)
+      .eq('status', 'active');
+
+    const countMap: Record<string, number> = {};
+    (seekerCounts || []).forEach((s) => {
+      if (s.center_id) {
+        countMap[s.center_id] = (countMap[s.center_id] || 0) + 1;
+      }
+    });
+
+    centersWithCounts = centers.map((c) => ({
+      ...c,
+      seeker_count: countMap[c.id] || 0,
+    }));
+  }
+} catch (err) {
+  console.warn('Centers fetch fallback:', err);
+}
+---
+
+<DashboardLayout title={t('centers.title')}>
+  <div class="space-y-6">
+    <div>
+      <h1 class="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
+        {t('centers.title')}
+      </h1>
+      <p class="text-xs text-gray-500 mt-1">
+        {locale === 'gu'
+          ? 'ભુજ અને આસપાસના સમર્પણ ધ્યાન કેન્દ્રો, સંચાલકો અને સત્ર સમયનું સંચાલન.'
+          : 'Manage active meditation centers, in-charges (Shanchalaks), and weekly schedules.'}
+      </p>
+    </div>
+
+    <!-- Center Table Island -->
+    <CenterTable
+      client:load
+      initialCenters={centersWithCounts}
+      locale={locale}
+      isAdmin={isAdmin}
+    />
+  </div>
+</DashboardLayout>

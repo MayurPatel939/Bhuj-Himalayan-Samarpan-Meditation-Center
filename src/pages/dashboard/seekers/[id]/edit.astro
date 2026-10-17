@@ -1,0 +1,42 @@
+---
+import DashboardLayout from '@/layouts/DashboardLayout.astro';
+import { SeekerForm } from '@/features/seekers/components/SeekerForm';
+
+const { id } = Astro.params;
+const { t, locale, supabase } = Astro.locals;
+
+// Fetch existing seeker and active centers
+const [{ data: seeker, error }, { data: centers }] = await Promise.all([
+  supabase.from('seekers').select('*').eq('id', id).single(),
+  supabase.from('centers').select('*').eq('is_active', true).order('name_en'),
+]);
+
+if (error || !seeker) {
+  return Astro.redirect('/dashboard/seekers');
+}
+---
+
+<DashboardLayout title={t('seekers.editSeeker')}>
+  <div class="max-w-4xl mx-auto space-y-6">
+    <div class="flex items-center justify-between">
+      <div>
+        <a href="/dashboard/seekers" class="text-xs font-semibold text-[#E8973A] hover:underline flex items-center gap-1 mb-1">
+          <span>←</span>
+          <span>{t('back')} to Directory</span>
+        </a>
+        <h1 class="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
+          {t('seekers.editSeeker')}: <span class="text-[#C2741C] font-mono">{seeker.seeker_id}</span>
+        </h1>
+      </div>
+    </div>
+
+    <!-- Seeker Form Island in Edit Mode -->
+    <SeekerForm
+      client:load
+      initialData={seeker}
+      centers={centers || []}
+      isEditing={true}
+      locale={locale}
+    />
+  </div>
+</DashboardLayout>
