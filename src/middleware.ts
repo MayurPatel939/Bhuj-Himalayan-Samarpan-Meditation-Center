@@ -1,6 +1,7 @@
 import { defineMiddleware } from 'astro:middleware';
 import { createSupabaseServerClient } from './lib/supabase/client';
 import { createTranslator, type Locale } from './i18n';
+import { getAppEnv } from './lib/env';
 
 export const onRequest = defineMiddleware(async (context, next) => {
   // 1. Language / Locale Detection
@@ -18,7 +19,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
   context.locals.t = createTranslator(locale);
 
   // 2. Initialize Supabase Server Client
-  const cfEnv = context.locals.runtime?.env;
+  const cfEnv = await getAppEnv();
   const supabase = createSupabaseServerClient({
     request: context.request,
     cookies: context.cookies,

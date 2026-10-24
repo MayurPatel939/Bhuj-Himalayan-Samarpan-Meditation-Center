@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import { getAppEnv } from '@/lib/env';
 
 export const POST: APIRoute = async ({ request, locals, redirect }) => {
   const formData = await request.formData();
@@ -43,7 +44,8 @@ export const POST: APIRoute = async ({ request, locals, redirect }) => {
       });
     }
 
-    const appUrl = locals.runtime?.env?.PUBLIC_APP_URL || import.meta.env.PUBLIC_APP_URL || 'http://localhost:4321';
+    const env = await getAppEnv();
+    const appUrl = env?.PUBLIC_APP_URL || import.meta.env.PUBLIC_APP_URL || 'http://localhost:4321';
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
@@ -136,7 +138,8 @@ export const POST: APIRoute = async ({ request, locals, redirect }) => {
 
   // 5. Google OAuth Initiator
   if (authType === 'google') {
-    const appUrl = locals.runtime?.env?.PUBLIC_APP_URL || import.meta.env.PUBLIC_APP_URL || 'http://localhost:4321';
+    const env = await getAppEnv();
+    const appUrl = env?.PUBLIC_APP_URL || import.meta.env.PUBLIC_APP_URL || 'http://localhost:4321';
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {

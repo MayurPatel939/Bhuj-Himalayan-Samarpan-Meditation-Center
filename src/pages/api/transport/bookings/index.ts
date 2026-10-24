@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { bookingSchema } from '@/features/transport/lib/validations';
 import { sendWhatsAppTemplateMessage } from '@/lib/whatsapp/client';
+import { getAppEnv } from '@/lib/env';
 
 export const POST: APIRoute = async ({ request, locals }) => {
   if (!locals.user) {
@@ -161,7 +162,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
             ],
           },
         ],
-        env: locals.runtime?.env,
+        env: await getAppEnv(),
       });
     } catch (e) {
       console.warn('[Transport Booking] WhatsApp alert error:', e);

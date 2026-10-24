@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { isAdminOrAbove } from '@/lib/auth/permissions';
 import { sendWhatsAppTemplateMessage } from '@/lib/whatsapp/client';
+import { getAppEnv } from '@/lib/env';
 
 /**
  * POST /api/notifications/send
@@ -37,7 +38,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
   }
 
   const supabase = locals.supabase;
-  const cfEnv = locals.runtime?.env;
+  const cfEnv = await getAppEnv();
 
   // Fetch seekers with consent
   const { data: seekers, error: seekerErr } = await supabase
