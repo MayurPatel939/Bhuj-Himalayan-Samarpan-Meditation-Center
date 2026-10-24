@@ -1,0 +1,35 @@
+---
+import DashboardLayout from '@/layouts/DashboardLayout.astro';
+import { ActivityManager } from '@/features/activities/components/ActivityManager';
+
+const { t, locale, supabase } = Astro.locals;
+
+// Fetch active centers
+const { data: centers } = await supabase
+  .from('centers')
+  .select('id, name_en, name_gu')
+  .eq('is_active', true)
+  .order('name_en');
+---
+
+<DashboardLayout title={t('nav.activities')}>
+  <div class="space-y-6">
+    <div>
+      <h1 class="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
+        {t('nav.activities')}
+      </h1>
+      <p class="text-xs text-gray-500 mt-1">
+        {locale === 'gu'
+          ? 'માસિક પૂર્ણિમા રાત્રિ સાધના, વિશેષ આધ્યાત્મિક સત્રો, સેવા પ્રવૃત્તિઓ અને હાજરી સંચાલન.'
+          : 'Monthly Poornima Ratri Sadhna, collective spiritual sessions, youth activities, and attendance.'}
+      </p>
+    </div>
+
+    <!-- Activity Manager Island -->
+    <ActivityManager
+      client:load
+      locale={locale}
+      centers={centers || []}
+    />
+  </div>
+</DashboardLayout>

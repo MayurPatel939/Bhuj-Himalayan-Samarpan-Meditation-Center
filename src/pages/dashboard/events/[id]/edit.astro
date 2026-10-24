@@ -1,0 +1,51 @@
+---
+import DashboardLayout from '@/layouts/DashboardLayout.astro';
+import { EventForm } from '@/features/events/components/EventForm';
+
+const { id } = Astro.params;
+const { t, locale, supabase } = Astro.locals;
+
+if (!id) {
+  return Astro.redirect('/dashboard/events');
+}
+
+// Fetch event and active centers
+const [{ data: event, error }, { data: centers }] = await Promise.all([
+  supabase.from('events').select('*').eq('id', id).maybeSingle(),
+  supabase.from('centers').select('*').eq('is_active', true).order('name_en'),
+]);
+
+if (error || !event) {
+  return Astro.redirect('/dashboard/events');
+}
+
+const eventTitle = locale === 'gu' && event.title_gu ? event.title_gu : event.title_en;
+---
+
+<DashboardLayout title={`${locale === 'gu' ? 'ફેરફાર કરો' : 'Edit'}: ${eventTitle}`}>
+  <div class="max-w-4xl mx-auto space-y-6">
+    <div>
+      <a href={`/dashboard/events/${id}`} class="text-xs font-semibold text-[#E8973A] hover:underline flex items-center gap-1 mb-1">
+        <span>←</span>
+        <span>{locale === 'gu' ? 'કાર્યક્રમ વિગત પર પાછા ફરો' : 'Back to Event Details'}</span>
+      </a>
+      <h1 class="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
+        {locale === 'gu' ? 'કાર્યક્રમમાં ફેરફાર કરો' : 'Edit Event'}: <span class="text-[#C2741C]">{eventTitle}</span>
+      </h1>
+      <p class="text-xs text-gray-500 mt-1">
+        {locale === 'gu'
+          ? 'તારીખ, સ્થળ, ક્ષમતા અથવા નોંધણી સમયમર્યાદા અપડેટ કરો.'
+          : 'Update event dates, venue location, attendee capacity, or registration deadlines.'}
+      </p>
+    </div>
+
+    <!-- Event Form Island in Edit Mode -->
+    <EventForm
+      client:load
+      initialData={event}
+      centers={centers || []}
+      isEditing={true}
+      locale={locale}
+    />
+  </div>
+</DashboardLayout>

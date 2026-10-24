@@ -1,0 +1,35 @@
+---
+import DashboardLayout from '@/layouts/DashboardLayout.astro';
+import { TransportScheduleManager } from '@/features/transport/components/TransportScheduleManager';
+
+const { t, locale, supabase } = Astro.locals;
+
+// Fetch vehicles and routes for modal selectors
+const [{ data: vehicles }, { data: routes }] = await Promise.all([
+  supabase.from('vehicles').select('*').eq('is_active', true).order('name'),
+  supabase.from('routes').select('*').eq('is_active', true).order('name_en'),
+]);
+---
+
+<DashboardLayout title={t('transport.title')}>
+  <div class="space-y-6">
+    <div>
+      <h1 class="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
+        {t('transport.title')}
+      </h1>
+      <p class="text-xs text-gray-500 mt-1">
+        {locale === 'gu'
+          ? 'ધ્યાન રથ, શિબિર સ્પેશિયલ બસો, બેઠક ક્ષમતા, ઓવરબુકિંગ પ્રતીક્ષા યાદી અને યાત્રી યાદીનું સંચાલન.'
+          : 'Dhyan Rath vehicles, camp bus routes, seat capacity, waitlist management, and passenger rosters.'}
+      </p>
+    </div>
+
+    <!-- Transport Manager Island -->
+    <TransportScheduleManager
+      client:load
+      locale={locale}
+      initialVehicles={vehicles || []}
+      initialRoutes={routes || []}
+    />
+  </div>
+</DashboardLayout>

@@ -53,7 +53,7 @@ export const PUT: APIRoute = async ({ params, request, locals }) => {
 
   const result = seekerSchema.safeParse(body);
   if (!result.success) {
-    return new Response(JSON.stringify({ error: result.error.errors[0]?.message || 'Validation error' }), {
+    return new Response(JSON.stringify({ error: result.error.issues[0]?.message || 'Validation error' }), {
       status: 400,
     });
   }

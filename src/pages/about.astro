@@ -1,0 +1,106 @@
+---
+import PublicLayout from '@/layouts/PublicLayout.astro';
+
+const { t, locale } = Astro.locals;
+---
+
+<PublicLayout title={t('nav.about')}>
+  <div class="py-12 sm:py-16 bg-[#FFF9F3]">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      <!-- Title -->
+      <div class="text-center space-y-3">
+        <span class="text-xs font-semibold text-[#E8973A] uppercase tracking-wider">
+          {locale === 'gu' ? 'શ્રી શિવકૃપાનંદ સ્વામીજી પ્રેષિત' : 'Inspired by Sadguru Shree Shivkrupanand Swamiji'}
+        </span>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">
+          {locale === 'gu' ? 'હિમાલયન સમર્પણ ધ્યાન યોગ' : 'Himalayan Samarpan Meditation'}
+        </h1>
+        <p class="text-sm text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          {locale === 'gu'
+            ? 'જાતિ, ધર્મ, વર્ગ કે ભાષાના ભેદભાવ વિના તમામ મનુષ્યો માટે આત્મસાક્ષાત્કાર અને પરમ શાંતિનો સરળ, નિઃશુલ્ક માર્ગ.'
+            : 'A simple, universal, and free path of inner transformation and soul-consciousness beyond all barriers.'}
+        </p>
+      </div>
+
+      <!-- Core Pillars -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-2xs space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-[#FDEED9] text-[#C2741C] flex items-center justify-center text-xl font-bold">
+            🕉️
+          </div>
+          <h3 class="text-base font-bold text-gray-900">
+            {locale === 'gu' ? 'સમર્પણ ભાવ' : 'Total Surrender'}
+          </h3>
+          <p class="text-xs text-gray-600 leading-relaxed">
+            {locale === 'gu'
+              ? 'પોતાના અહંકાર અને મનના વિચારોને પરમ ચેતનાને સમર્પિત કરી શૂન્યાવસ્થા અને અંતરશાંતિ પ્રાપ્ત કરવી.'
+              : 'Dissolving the ego and negative thoughts into divine grace to experience supreme thoughtless peace.'}
+          </p>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-2xs space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-[#E8F2FC] text-[#2F6DB1] flex items-center justify-center text-xl font-bold">
+            ✨
+          </div>
+          <h3 class="text-base font-bold text-gray-900">
+            {locale === 'gu' ? 'નિઃશુલ્ક સાધના' : 'Always Free'}
+          </h3>
+          <p class="text-xs text-gray-600 leading-relaxed">
+            {locale === 'gu'
+              ? 'સમર્પણ ધ્યાન ક્યારેય વ્યાવસાયિક નથી. તમામ શિબિરો અને સત્રો સહુ માટે સદા નિઃશુલ્ક રાખવામાં આવે છે.'
+              : 'Meditation is the birthright of every human soul. All shivirs and sessions are 100% free forever.'}
+          </p>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-2xs space-y-3">
+          <div class="w-10 h-10 rounded-xl bg-[#EDF5EF] text-[#4F7959] flex items-center justify-center text-xl font-bold">
+            🌸
+          </div>
+          <h3 class="text-base font-bold text-gray-900">
+            {locale === 'gu' ? 'સામૂહિક ચેતના' : 'Collective Power'}
+          </h3>
+          <p class="text-xs text-gray-600 leading-relaxed">
+            {locale === 'gu'
+              ? 'ભુજ અને કચ્છના વિવિધ કેન્દ્રોમાં સાથે બેસીને ધ્યાન કરવાથી ચૈતન્ય અને સકારાત્મક ઊર્જામાં વધારો થાય છે.'
+              : 'Meditating together at local centers amplifies vibrations and radiates healing peace to society.'}
+          </p>
+        </div>
+      </div>
+
+      <!-- Detailed Info Card -->
+      <div class="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm space-y-6">
+        <h2 class="text-xl font-bold text-gray-900">
+          {locale === 'gu' ? 'સમર્પણ ધ્યાનની પદ્ધતિ' : 'The Practice of Samarpan Meditation'}
+        </h2>
+        <div class="space-y-4 text-xs sm:text-sm text-gray-600 leading-relaxed font-sans">
+          <p>
+            {locale === 'gu'
+              ? 'સમર્પણ ધ્યાન કોઈ શારીરિક કસરત કે પ્રાણાયામ નથી, પરંતુ અંતરમનની સહજ અનુભૂતિ છે. આંખો બંધ કરી, સુખાસનમાં બેસી, વિશુદ્ધ ચક્ર અથવા આ સહસ્ત્રાર ચક્ર પર ધ્યાન કેન્દ્રિત કરવામાં આવે છે.'
+              : 'Himalayan Samarpan Meditation does not involve complex postures or forced breath control. It is a natural process where one sits comfortably, closes eyes, and gently surrenders to the divine guru vibrations connecting through the crown chakra (Sahasrara).'}
+          </p>
+          <p>
+            {locale === 'gu'
+              ? 'દરરોજ સવારે અથવા સાંજે માત્ર ૩૦ મિનિટનું ધ્યાન જીવનમાં ઊર્જા, માનસિક સ્થિરતા, તણાવમુક્તિ અને આધ્યાત્મિક પ્રગતિ લાવે છે.'
+              : 'Just 30 minutes of daily morning or evening meditation brings physical balance, stress release, heightened immunity, mental clarity, and spiritual awakening.'}
+          </p>
+        </div>
+
+        <div class="pt-4 border-t border-gray-100 flex flex-wrap items-center justify-between gap-4">
+          <div class="text-xs text-gray-500">
+            <span>📍 {locale === 'gu' ? 'ભુજ - કચ્છ કેન્દ્રો' : 'Bhuj - Kutch Centers'}</span>
+            <span class="mx-2">•</span>
+            <span>📞 02832-250000</span>
+          </div>
+
+          <a
+            href="/centers"
+            class="inline-flex items-center gap-1.5 px-4 py-2 bg-[#E8973A] hover:bg-[#C2741C] text-white text-xs font-semibold rounded-xl shadow-xs transition-colors"
+          >
+            <span>{locale === 'gu' ? 'નજીકનું ધ્યાન કેન્દ્ર શોધો' : 'Find Your Nearest Center'}</span>
+            <span>→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</PublicLayout>

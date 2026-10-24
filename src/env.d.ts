@@ -21,7 +21,12 @@ type Runtime = {
 
 declare namespace App {
   interface Locals {
-    runtime: Runtime;
+    runtime: {
+      env: ENV;
+      cfContext?: any;
+      waitUntil?: (promise: Promise<any>) => void;
+      passThroughOnException?: () => void;
+    };
     supabase: import("@supabase/supabase-js").SupabaseClient;
     user: import("@supabase/supabase-js").User | null;
     profile: {

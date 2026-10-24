@@ -1,0 +1,38 @@
+---
+import DashboardLayout from '@/layouts/DashboardLayout.astro';
+import { EventTable } from '@/features/events/components/EventTable';
+import { isAdminOrAbove } from '@/lib/auth/permissions';
+
+const { t, locale, roles } = Astro.locals;
+const canCreateEvent = isAdminOrAbove(roles) || roles.some((r) => ['event_coordinator', 'center_coordinator'].includes(r.role_name));
+---
+
+<DashboardLayout title={t('events.title')}>
+  <div class="space-y-6">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div>
+        <h1 class="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
+          {t('events.title')}
+        </h1>
+        <p class="text-xs text-gray-500 mt-1">
+          {locale === 'gu'
+            ? 'સમર્પણ ધ્યાન શિબિરો, વિશેષ કાર્યક્રમો, ક્ષમતા સંચાલન અને હાજરી ટ્રેકિંગ.'
+            : 'Manage meditation camps, special events, attendee capacity, and real-time attendance.'}
+        </p>
+      </div>
+
+      {canCreateEvent && (
+        <a
+          href="/dashboard/events/new"
+          class="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-[#E8973A] to-[#F3AA55] hover:from-[#C2741C] hover:to-[#E8973A] text-white text-xs font-semibold rounded-xl shadow-xs transition-all"
+        >
+          <span>+</span>
+          <span>{t('events.addEvent')}</span>
+        </a>
+      )}
+    </div>
+
+    <!-- Event Table Island -->
+    <EventTable client:load locale={locale} />
+  </div>
+</DashboardLayout>

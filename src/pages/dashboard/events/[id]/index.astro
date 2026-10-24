@@ -1,0 +1,50 @@
+---
+import DashboardLayout from '@/layouts/DashboardLayout.astro';
+import { EventDetailPanel } from '@/features/events/components/EventDetailPanel';
+
+const { id } = Astro.params;
+const { t, locale, supabase } = Astro.locals;
+
+if (!id) {
+  return Astro.redirect('/dashboard/events');
+}
+
+// Fetch event title for breadcrumbs/metadata
+const { data: event } = await supabase
+  .from('events')
+  .select('id, title_en, title_gu')
+  .eq('id', id)
+  .maybeSingle();
+
+if (!event) {
+  return Astro.redirect('/dashboard/events');
+}
+
+const eventTitle = locale === 'gu' && event.title_gu ? event.title_gu : event.title_en;
+---
+
+<DashboardLayout title={eventTitle}>
+  <div class="space-y-6">
+    <div class="flex items-center justify-between">
+      <a href="/dashboard/events" class="text-xs font-semibold text-[#E8973A] hover:underline flex items-center gap-1">
+        <span>←</span>
+        <span>{locale === 'gu' ? 'કાર્યક્રમ યાદી પર પાછા ફરો' : 'Back to Events'}</span>
+      </a>
+
+      <a
+        href={`/dashboard/events/${id}/edit`}
+        class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold rounded-lg transition-colors"
+      >
+        <span>✏️</span>
+        <span>{locale === 'gu' ? 'કાર્યક્રમમાં ફેરફાર કરો' : 'Edit Event'}</span>
+      </a>
+    </div>
+
+    <!-- Event Detail Panel Island -->
+    <EventDetailPanel
+      client:load
+      eventId={id}
+      locale={locale}
+    />
+  </div>
+</DashboardLayout>

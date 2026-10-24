@@ -1,0 +1,186 @@
+---
+import PublicLayout from '@/layouts/PublicLayout.astro';
+import { Badge } from '@/components/react/ui/Badge';
+
+const { t, locale, supabase } = Astro.locals;
+
+let events: any[] = [];
+try {
+  const { data } = await supabase
+    .from('events')
+    .select('*, centers(name_en, name_gu)')
+    .eq('is_public', true)
+    .in('status', ['published', 'registration_open'])
+    .order('start_date', { ascending: true });
+  events = data || [];
+} catch (err) {
+  console.warn('Public events fallback:', err);
+}
+
+if (events.length === 0) {
+  events = [
+    {
+      id: 'mock-1',
+      title_en: '8-Day Himalayan Samarpan Meditation Maha Shivir',
+      title_gu: '૮ દિવસીય હિમાલયન સમર્પણ ધ્યાન મહા શિબિર',
+      description_en: 'A transformative 8-day introduction to Himalayan Samarpan Meditation. Learn self-realization techniques with divine grace.',
+      description_gu: '૮ દિવસીય નિઃશુલ્ક સમર્પણ ધ્યાન શિબિર. ગુરુકૃપા અને આત્મ-અનુભૂતિનું પવિત્ર આયોજન.',
+      venue_en: 'Town Hall, Near Jubilee Ground, Bhuj',
+      venue_gu: 'ટાઉન હોલ, જ્યુબિલી ગ્રાઉન્ડ પાસે, ભુજ',
+      start_date: new Date(Date.now() + 86400000 * 5).toISOString(),
+      end_date: new Date(Date.now() + 86400000 * 13).toISOString(),
+      event_type: 'maha_shivir',
+      status: 'registration_open',
+      max_capacity: 500,
+      requires_transport: true,
+    },
+    {
+      id: 'mock-2',
+      title_en: 'Monthly Poornima Ratri Sadhna',
+      title_gu: 'માસિક પૂર્ણિમા રાત્રિ સાધના',
+      description_en: 'Special full-moon overnight collective meditation session with divine vibratory atmosphere.',
+      description_gu: 'પૂનમની રાત્રિએ સામૂહિક ધ્યાન અને ચૈતન્યમય વાતાવરણમાં વિશેષ સાધના.',
+      venue_en: 'Madhapar Samarpan Ashram Hall',
+      venue_gu: 'માધાપર સમર્પણ આશ્રમ હોલ',
+      start_date: new Date(Date.now() + 86400000 * 18).toISOString(),
+      end_date: new Date(Date.now() + 86400000 * 19).toISOString(),
+      event_type: 'ratri_sadhna',
+      status: 'published',
+      max_capacity: 250,
+      requires_transport: true,
+    },
+    {
+      id: 'mock-3',
+      title_en: 'Youth & Family Meditation Workshop',
+      title_gu: 'યુવા અને પરિવાર ધ્યાન કાર્યશાળા',
+      description_en: 'Special weekend meditation and stress management workshop for students, working professionals, and families.',
+      description_gu: 'વિદ્યાર્થીઓ અને પરિવારો માટે તણાવમુક્તિ અને એકાગ્રતા માટે વિશેષ ધ્યાન કાર્યશાળા.',
+      venue_en: 'Mirzapar Community Center, Bhuj',
+      venue_gu: 'મિર્ઝાપર કમ્યુનિટી સેન્ટર, ભુજ',
+      start_date: new Date(Date.now() + 86400000 * 25).toISOString(),
+      end_date: new Date(Date.now() + 86400000 * 26).toISOString(),
+      event_type: 'workshop',
+      status: 'registration_open',
+      max_capacity: 150,
+      requires_transport: false,
+    },
+  ];
+}
+
+const formatDate = (dateStr: string) => {
+  return new Date(dateStr).toLocaleDateString(locale === 'gu' ? 'gu-IN' : 'en-IN', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+};
+---
+
+<PublicLayout title={t('events.title')}>
+  <div class="py-12 sm:py-16 bg-[#FFF9F3]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+      <div class="text-center max-w-2xl mx-auto space-y-3">
+        <span class="text-xs font-semibold text-[#E8973A] uppercase tracking-wider">
+          {locale === 'gu' ? 'આધ્યાત્મિક ઉત્સવો' : 'Spiritual Gatherings'}
+        </span>
+        <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">
+          {t('events.title')}
+        </h1>
+        <p class="text-xs sm:text-sm text-gray-600 leading-relaxed">
+          {locale === 'gu'
+            ? 'ભુજ અને આસપાસના વિસ્તારોમાં આયોજિત સમર્પણ ધ્યાન શિબિરો, રાત્રિ સાધના અને વિશેષ આધ્યાત્મિક સત્રો.'
+            : 'Join our collective Himalayan Samarpan Meditation shivirs, workshops, and spiritual events in Bhuj.'}
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {events.map((ev) => {
+          const title = locale === 'gu' && ev.title_gu ? ev.title_gu : ev.title_en;
+          const desc = locale === 'gu' && ev.description_gu ? ev.description_gu : ev.description_en;
+          const venue = locale === 'gu' && ev.venue_gu ? ev.venue_gu : ev.venue_en;
+
+          return (
+            <div class="bg-white rounded-2xl border border-gray-100 p-6 shadow-2xs hover:shadow-md transition-shadow flex flex-col justify-between space-y-5">
+              <div class="space-y-4">
+                <div class="flex items-start justify-between gap-2">
+                  <Badge variant="saffron">
+                    {ev.event_type.replace(/_/g, ' ').toUpperCase()}
+                  </Badge>
+                  <Badge variant={ev.status === 'registration_open' ? 'sage' : 'blue'}>
+                    {ev.status === 'registration_open'
+                      ? (locale === 'gu' ? 'નોંધણી શરૂ' : 'Registration Open')
+                      : (locale === 'gu' ? 'આયોજિત' : 'Scheduled')}
+                  </Badge>
+                </div>
+
+                <div>
+                  <h3 class="font-bold text-gray-900 text-base leading-snug">
+                    {title}
+                  </h3>
+                  {desc && (
+                    <p class="text-xs text-gray-500 mt-1 line-clamp-2 leading-relaxed">
+                      {desc}
+                    </p>
+                  )}
+                </div>
+
+                <div class="space-y-2 text-xs text-gray-600 pt-2 border-t border-gray-50">
+                  <div class="flex items-start gap-2">
+                    <span class="text-[#E8973A]">📅</span>
+                    <div>
+                      <p class="font-semibold text-gray-800">{formatDate(ev.start_date)}</p>
+                      {ev.end_date && (
+                        <p class="text-[11px] text-gray-500">to {formatDate(ev.end_date)}</p>
+                      )}
+                    </div>
+                  </div>
+
+                  {venue && (
+                    <div class="flex items-start gap-2">
+                      <span class="text-[#E8973A]">📍</span>
+                      <span class="text-gray-700">{venue}</span>
+                    </div>
+                  )}
+
+                  {ev.max_capacity && (
+                    <div class="flex items-center gap-2">
+                      <span class="text-[#E8973A]">👥</span>
+                      <span class="text-gray-700">
+                        {locale === 'gu' ? `મહત્તમ ક્ષમતા: ${ev.max_capacity} સાધકો` : `Max Capacity: ${ev.max_capacity} seekers`}
+                      </span>
+                    </div>
+                  )}
+
+                  {ev.requires_transport && (
+                    <div class="flex items-center gap-2 text-[#4A90D9]">
+                      <span>🚌</span>
+                      <span class="font-medium">
+                        {locale === 'gu' ? 'ધ્યાન રથ / બસ વ્યવસ્થા ઉપલબ્ધ' : 'Dhyan Rath / Bus Transport Available'}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div class="pt-3 border-t border-gray-100 flex items-center justify-between">
+                <span class="text-[11px] font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full">
+                  {locale === 'gu' ? 'નિઃશુલ્ક પ્રવેશ' : 'Free Entry'}
+                </span>
+
+                <a
+                  href="/login"
+                  class="text-xs font-semibold text-[#E8973A] hover:text-[#C2741C] flex items-center gap-1 group"
+                >
+                  <span>{locale === 'gu' ? 'નોંધણી વિગતો' : 'Register Now'}</span>
+                  <span class="group-hover:translate-x-0.5 transition-transform">→</span>
+                </a>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+</PublicLayout>

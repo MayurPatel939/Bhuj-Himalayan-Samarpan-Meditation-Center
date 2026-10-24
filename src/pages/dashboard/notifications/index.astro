@@ -1,0 +1,35 @@
+---
+import DashboardLayout from '@/layouts/DashboardLayout.astro';
+import { NotificationManager } from '@/features/notifications/components/NotificationManager';
+
+const { t, locale, supabase } = Astro.locals;
+
+// Fetch active centers for target audience filtering
+const { data: centers } = await supabase
+  .from('centers')
+  .select('id, name_en, name_gu')
+  .eq('is_active', true)
+  .order('name_en');
+---
+
+<DashboardLayout title={t('nav.notifications')}>
+  <div class="space-y-6">
+    <div>
+      <h1 class="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight">
+        {t('nav.notifications')}
+      </h1>
+      <p class="text-xs text-gray-500 mt-1">
+        {locale === 'gu'
+          ? 'મેટા ક્લાઉડ એપીઆઈ દ્વારા વોટ્સએપ સૂચનાઓ, દૈનિક જન્મદિવસની શુભેચ્છાઓ અને શિબિર સંદેશાઓનું સંચાલન.'
+          : 'Official Meta WhatsApp Business Cloud API automation, daily greetings, and broadcast logs.'}
+      </p>
+    </div>
+
+    <!-- Notification Manager Island -->
+    <NotificationManager
+      client:load
+      locale={locale}
+      centers={centers || []}
+    />
+  </div>
+</DashboardLayout>
